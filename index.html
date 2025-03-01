@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <section class="p-4 bg-gradient-to-tl  from-blue-300 to-green-400 min-h-screen">
+    <div class=" w-full md:max-w-[45%] mx-auto bg-white px-8 py-6 rounded-lg shadow">
+      <h1 class="text-center text-2xl">Expense Tracker</h1>
+      <div class=" mt-4  mb-8">
+        <h1 class="text-xl" id="income-part">Total income:₹0</h1>
+        <h1 class="text-xl" id="expense-part">Total Expense:₹0</h1>
+        <h1 class="text-xl" id="balance-part">Net balance:₹0</h1>
+      </div>
+
+      <form id="saving-log" class=" flex flex-col space-y-4 mb-4 ">
+       <input id="content" class="w-full  border rounded focus:outline-none focus:ring-2  focus:ring-blue-600 px-3 py-2" type="text" placeholder="Description">
+       <input id="amount" class="w-full  border rounded focus:outline-none focus:ring-2  focus:ring-blue-600  px-3 py-2" type="number"  placeholder="Amount">
+       <select id="dropdown" class="w-full px-3 py-2">
+       <option value="income">Income</option>
+       <option value="expense">Expense</option>
+       </select>
+
+       <button class="bg-blue-600 w-full  hover:bg-blue-500 px-3 py-2 text-white" type="submit">Add Entry</button>
+      </form>
+       <button id="reset"class="bg-green-600 w-full hover:bg-green-500  px-3 py-2 text-white mb-4">Reset</button>
+      
+      
+     
+      <div   class="space-x-2 mb-4">
+      <label><input  class="mr-2" type="radio" id="" value="" name="income">All</label>
+      
+      <label><input  class="mr-2" type="radio" id="" value="" name="income">Income</label>
+     
+      <label><input class="mr-2" type="radio" id="" value="" name="income">Expense</label>
+      </div>
+     
+     <ul id="add-entries"></ul>
+    </div>
+    </section>
+</body>
+<script>
+  let income=document.getElementById("income-part");
+  let expense=document.getElementById("expense-part");
+  let balance=document.getElementById("balance-part");
+  let addEntries=document.getElementById("add-entries");
+
+ 
+  let saving=[];
+  totalIncome=0;
+  totalExpense=0;
+  let savings = JSON.parse(localStorage.getItem("savings")) || [];
+   
+  document.getElementById("saving-log")
+  .addEventListener("submit",addAmount);
+  
+  function addAmount(event){
+    event.preventDefault();
+  const content=parseInt(document.getElementById("content").value);
+  const amount=parseInt(document.getElementById("amount").value);
+  const dropdown=document.getElementById("dropdown").value;
+
+  
+if(dropdown==='income'){
+  totalIncome=totalIncome+amount;
+}else if(dropdown==='expense'){
+  totalExpense=totalExpense+amount;
+
+}
+    savings.push({ amount,type:dropdown });
+    localStorage.setItem("savings", JSON.stringify(savings));
+    updateUI();
+  
+      }
+    
+   
+  //it will show income
+function updateUI(){
+  const TotalAmount = savings.reduce(
+          (acc, entry) => acc + entry.amount,
+          0
+        );
+  income.innerText=`Total income:₹${totalIncome }`;
+  expense.innerText=`Total Expense:₹${ totalExpense}`;
+  balance.innerText=`Net balance:₹${Math.max(totalIncome- totalExpense,0 )}`;
+  
+  addEntries.innerText="";
+
+  savings.forEach((entry,index)=>{
+ const li=document.createElement("li")
+ li.className=" flex justify-between bg-gray-200 w-full  mb-2 p-4"
+ li.innerHTML=`${entry.amount} <div class="space-x-2"><button class="bg-blue-500 px-3 py-1 text-white rounded"  onclick="EditItem(${index}>Edit</button>
+   <button class="bg-red-500 px-3 py-1 text-white rounded" onclick="deleteItem(${index})">Delete</button></div>`
+ addEntries.appendChild(li);
+  })
+         
+}
+
+//delete part
+function deleteItem(index){
+savings.splice(index,1);
+updateUI();
+}
+
+
+
+  
+</script>
+</html>
