@@ -30,12 +30,12 @@
       
       
      
-      <div   class="space-x-2 mb-4">
-      <label><input  class="mr-2" type="radio" id="" value="" name="income">All</label>
+      <div class="space-x-2 mb-4">
+      <label><input  class="mr-2" type="radio" id="" value="all" name="filter" checked>All</label>
       
-      <label><input  class="mr-2" type="radio" id="" value="" name="income">Income</label>
+      <label><input  class="mr-2" type="radio" id="" value="income" name="filter">Income</label>
      
-      <label><input class="mr-2" type="radio" id="" value="" name="income">Expense</label>
+      <label><input class="mr-2" type="radio" id="" value="expense" name="filter">Expense</label>
       </div>
      
      <ul id="add-entries"></ul>
@@ -47,6 +47,8 @@
   let expense=document.getElementById("expense-part");
   let balance=document.getElementById("balance-part");
   let addEntries=document.getElementById("add-entries");
+  let filter=document.getElementsByName("filter");
+  let reset=document.getElementById("reset")
 
  
   let saving=[];
@@ -79,15 +81,15 @@ if(dropdown==='income'){
     
    
   //it will show income
-function updateUI(){
-  // const TotalAmount = savings.reduce((acc, entry) => acc + entry.amount, 0);
+function updateUI(filterValue = "all"){
+   const filteredSavings = savings.filter(entry => filterValue === "all" || entry.type === filterValue);
   income.innerText=`Total income:₹${totalIncome }`;
   expense.innerText=`Total Expense:₹${ totalExpense}`;
   balance.innerText=`Net balance:₹${Math.max(totalIncome- totalExpense,0 )}`;
   
   addEntries.innerText="";
 
-  savings.forEach((entry,index)=>{
+   filteredSavings.forEach((entry,index)=>{
  const li=document.createElement("li")
  li.className=" flex justify-between bg-gray-200 w-full  mb-2 p-4"
  li.innerHTML=`₹${entry.amount}-${entry.content} <div class="space-x-2"><button class="bg-blue-500 px-3 py-1 text-white rounded"  onclick="editItem(${index})">Edit</button>
@@ -111,7 +113,20 @@ function editItem(index){
  deleteItem(index);
 }
 
+ filter.forEach((radio) => {
+        radio.addEventListener("change", () => {
+            const selectedFilter = document.querySelector('input[name="filter"]:checked').value;
+            updateUI(selectedFilter); // Update UI based on selected filter
+        });
+    });
 
-  
+  reset.addEventListener("click",()=>{
+    savings = [];
+    totalIncome=0;
+   totalExpense=0;
+        updateUI();
+        localStorage.clear();
+  }
+  )
 </script>
 </html>
