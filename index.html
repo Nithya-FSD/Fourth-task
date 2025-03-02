@@ -50,16 +50,16 @@
 
  
   let saving=[];
-  totalIncome=0;
-  totalExpense=0;
+  let totalIncome=0;
+  let totalExpense=0;
   let savings = JSON.parse(localStorage.getItem("savings")) || [];
-   
+   console.log(localStorage.getItem("savings"))
   document.getElementById("saving-log")
   .addEventListener("submit",addAmount);
   
   function addAmount(event){
     event.preventDefault();
-  const content=parseInt(document.getElementById("content").value);
+  const content=document.getElementById("content").value;
   const amount=parseInt(document.getElementById("amount").value);
   const dropdown=document.getElementById("dropdown").value;
 
@@ -70,19 +70,17 @@ if(dropdown==='income'){
   totalExpense=totalExpense+amount;
 
 }
-    savings.push({ amount,type:dropdown });
+    savings.push({ content,amount,type:dropdown });
     localStorage.setItem("savings", JSON.stringify(savings));
     updateUI();
-  
+  document.getElementById("amount").value="";
+  document.getElementById("content").value="";
       }
     
    
   //it will show income
 function updateUI(){
-  const TotalAmount = savings.reduce(
-          (acc, entry) => acc + entry.amount,
-          0
-        );
+  // const TotalAmount = savings.reduce((acc, entry) => acc + entry.amount, 0);
   income.innerText=`Total income:₹${totalIncome }`;
   expense.innerText=`Total Expense:₹${ totalExpense}`;
   balance.innerText=`Net balance:₹${Math.max(totalIncome- totalExpense,0 )}`;
@@ -92,7 +90,7 @@ function updateUI(){
   savings.forEach((entry,index)=>{
  const li=document.createElement("li")
  li.className=" flex justify-between bg-gray-200 w-full  mb-2 p-4"
- li.innerHTML=`${entry.amount} <div class="space-x-2"><button class="bg-blue-500 px-3 py-1 text-white rounded"  onclick="EditItem(${index}>Edit</button>
+ li.innerHTML=`₹${entry.amount}-${entry.content} <div class="space-x-2"><button class="bg-blue-500 px-3 py-1 text-white rounded"  onclick="editItem(${index})">Edit</button>
    <button class="bg-red-500 px-3 py-1 text-white rounded" onclick="deleteItem(${index})">Delete</button></div>`
  addEntries.appendChild(li);
   })
@@ -105,6 +103,13 @@ savings.splice(index,1);
 updateUI();
 }
 
+//edit part
+function editItem(index){
+ const entry = savings[index];
+  document.getElementById("content").value = entry.content;
+  document.getElementById("amount").value = entry.amount;
+ deleteItem(index);
+}
 
 
   
