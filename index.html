@@ -136,7 +136,7 @@ function editItem(index){
   document.getElementById("amount").value = entry.amount;
   document.getElementById("dropdown").value=entry.type;
  deleteItem(index);
- updateUI();
+
  
  
 }
@@ -144,7 +144,7 @@ function editItem(index){
  filter.forEach((radio) => {
         radio.addEventListener("change", () => {
             const selectedFilter = document.querySelector('input[name="filter"]:checked').value;
-            updateUI(selectedFilter); // Update UI based on selected filter
+            updateUI(selectedFilter); 
         });
     });
 
@@ -154,6 +154,8 @@ function editItem(index){
    totalExpense=0;
         updateUI();
         localStorage.clear();
+        content.value="";
+        amount.value="";
   }
   
   )
