@@ -96,8 +96,13 @@ if(dropdown==='income'){
     
    
   //it will show income
-function updateUI(filterValue = "all"){
-   const filteredSavings = savings.filter(entry => filterValue === "all" || entry.type === filterValue);
+function updateUI(){
+    const selectedFilter = document.querySelector('input[name="filter"]:checked').value;
+    
+   const filteredEntries = selectedFilter === "all" 
+      ? savings 
+      : savings.filter(entry => entry.type === selectedFilter);
+    
   income.innerText=`Total income:₹${totalIncome }`;
   expense.innerText=`Total Expense:₹${ totalExpense}`;
   balance.innerText=`Net balance:₹${Math.max(totalIncome- totalExpense,0 )}`;
