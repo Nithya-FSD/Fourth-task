@@ -3,167 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Income Expense Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-    <section class="p-4 bg-gradient-to-tl  from-blue-300 to-green-400 min-h-screen">
-    <div class=" w-full md:max-w-[45%] mx-auto bg-white px-8 py-6 rounded-lg shadow mt-6 ">
-      <h1 class="text-center font-bold  text-2xl">Income Expense Calculator</h1>
-      <div class=" bg-gray-200 rounded  mt-6  mb-8 p-4">
-        <h1 class="text-xl font-semibold" id="income-part">Total Income:₹0</h1>
-        <h1 class="text-xl  font-semibold" id="expense-part">Total Expense:₹0</h1>
-        <h1 class="text-xl  font-semibold" id="balance-part">Net Balance:₹0</h1>
-      </div>
+    <section class="p-4 bg-gradient-to-tl from-blue-300 to-green-400 min-h-screen">
+        <div class="w-full md:max-w-[45%] mx-auto bg-white px-8 py-6 rounded-lg shadow mt-6">
+            <h1 class="text-center font-bold text-2xl">Income Expense Calculator</h1>
 
-      <form id="saving-log" class=" flex flex-col space-y-4 mb-4 ">
-       <input id="content" class="w-full  border rounded focus:outline-none focus:ring-2  focus:ring-blue-600 px-3 py-2" type="text" placeholder="Description">
-       <input id="amount" class="w-full  border rounded focus:outline-none focus:ring-2  focus:ring-blue-600  px-3 py-2" type="number"  placeholder="Amount">
-       <select id="dropdown" class="w-full px-3 py-2 border rounded">
-       <option value="income">Income</option>
-       <option value="expense">Expense</option>
-       </select>
-
-       <button class="bg-blue-600 w-full  hover:bg-blue-500 px-3 py-2 text-white" type="submit">Add Entry</button>
-      </form>
-       <button id="reset"class="bg-green-600 w-full hover:bg-green-500  px-3 py-2 text-white mb-4">Reset</button>
-      
-      
-     
-      <div class="space-x-2 mb-4">
-      <label><input  class="mr-2" type="radio" id="" value="all" name="filter" checked>All</label>
-      
-      <label><input  class="mr-2" type="radio" id="" value="income" name="filter">Income</label>
-     
-      <label><input class="mr-2" type="radio" id="" value="expense" name="filter">Expense</label>
-      </div>
-     
-     <ul id="add-entries"></ul>
-    </div>
-    </section>
-</body>
-<script>
-  
-  let income=document.getElementById("income-part");
-  let expense=document.getElementById("expense-part");
-  let balance=document.getElementById("balance-part");
-  let addEntries=document.getElementById("add-entries");
-  let filter=document.getElementsByName("filter");
-  let reset=document.getElementById("reset")
-
- 
-  let saving=[];
-  let totalIncome=0;
-  let totalExpense=0;
-  let savings = JSON.parse(localStorage.getItem("savings")) || [];
-   console.log(localStorage.getItem("savings"))
-  document.getElementById("saving-log")
-  .addEventListener("submit",addAmount);
-
-
-  savings.forEach(entry => {
-        if (entry.type === 'income') {
-            totalIncome += entry.amount;
-        } else if (entry.type === 'expense') {
-            totalExpense += entry.amount;
-        }
         
-    });
-  
-  function addAmount(event){
-    event.preventDefault();
-  const content=document.getElementById("content").value;
-  const amount=parseInt(document.getElementById("amount").value);
-  const dropdown=document.getElementById("dropdown").value;
+            <div class="bg-gray-200 rounded mt-6 mb-8 p-4">
+                <h1 class="text-xl font-semibold" id="income-part">Total Income: ₹0</h1>
+                <h1 class="text-xl font-semibold" id="expense-part">Total Expense: ₹0</h1>
+                <h1 class="text-xl font-semibold" id="balance-part">Net Balance: ₹0</h1>
+            </div>
 
-  
-  if(amount===""|| content===""||isNaN(amount)){
-    alert("please Enter all  the fields")
-    return;
-  }
-if(dropdown==='income'){
-  totalIncome=totalIncome+amount;
-}else if(dropdown==='expense'){
-  totalExpense=totalExpense+amount;
-}
-    savings.push({ content,amount,type:dropdown });
-    localStorage.setItem("savings", JSON.stringify(savings));
-    updateUI();
-  document.getElementById("amount").value="";
-  document.getElementById("content").value="";
+            <form id="saving-log" class="flex flex-col space-y-4 mb-4">
+                <input id="content" class="w-full border rounded px-3 py-2" type="text" placeholder="Description">
+                <input id="amount" class="w-full border rounded px-3 py-2" type="number" placeholder="Amount">
+                <select id="dropdown" class="w-full px-3 py-2 border rounded">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+                <button class="bg-blue-600 w-full text-white px-3 py-2" type="submit">Add Entry</button>
+            </form>
 
-      }
-    
-   
-  //it will show income
-function updateUI(){
-    const selectedFilter = document.querySelector('input[name="filter"]:checked').value;
-    
-   const filteredEntries = selectedFilter === "all" 
-      ? savings 
-      : savings.filter(entry => entry.type === selectedFilter);
-    
-  income.innerText=`Total income:₹${totalIncome }`;
-  expense.innerText=`Total Expense:₹${ totalExpense}`;
-  balance.innerText=`Net balance:₹${Math.max(totalIncome- totalExpense,0 )}`;
-  
-  addEntries.innerText="";
+            <button id="reset" class="bg-green-600 w-full text-white px-3 py-2 mb-4">Reset</button>
 
-   filteredSavings.forEach((entry,index)=>{
- const li=document.createElement("li")
+            <div class="space-x-2 mb-4">
+                <label><input type="radio" value="all" name="filter" checked>All</label>
+                <label><input type="radio" value="income" name="filter">Income</label>
+                <label><input type="radio" value="expense" name="filter">Expense</label>
+            </div>
+
+            <ul id="add-entries"></ul>
+        </div>
+    </section>
+
+    <script>
+        
+        const incomePart = document.getElementById("income-part");
+        const expensePart = document.getElementById("expense-part");
+        const balancePart = document.getElementById("balance-part");
+        const addEntries = document.getElementById("add-entries");
+        const resetButton = document.getElementById("reset");
+        const form = document.getElementById("saving-log");
+        const filterRadios = document.getElementsByName("filter");
+
+        let totalIncome = 0;
+        let totalExpense = 0;
+        let savings = JSON.parse(localStorage.getItem("savings")) || [];
+
+
+        form.addEventListener("submit", addAmount);
+        resetButton.addEventListener("click", resetAll);
+        filterRadios.forEach(radio => radio.addEventListener("change", updateUI));
+        updateUI();
+
+
+        function addAmount(event) {
+            event.preventDefault();
+            const content = document.getElementById("content").value;
+            const amount = parseInt(document.getElementById("amount").value);
+            const type = document.getElementById("dropdown").value;
+
+            
+            if (!content || isNaN(amount) || amount <= 0) {
+                alert("Please enter valid description and amount");
+                return;
+            }
+
+            savings.push({ id:Date.now(),content, amount,type});
+
+            localStorage.setItem("savings", JSON.stringify(savings));
+
+            document.getElementById("content").value = "";
+            document.getElementById("amount").value = "";
+            updateUI();
+        }
+
+        
+        function updateUI() {
+         
+            const selectedFilter = document.querySelector('input[name="filter"]:checked').value;
+            totalIncome = savings.filter(entry => entry.type === 'income').reduce((total, entry) => total + entry.amount, 0);
+            totalExpense = savings.filter(entry => entry.type === 'expense').reduce((total, entry) => total + entry.amount, 0);
+           
+     
+            incomePart.textContent = `Total Income: ₹${totalIncome}`;
+            expensePart.textContent = `Total Expense: ₹${totalExpense}`;
+            balancePart.textContent = `Net Balance: ₹${Math.max(totalIncome- totalExpense,0 )}`;
+
+          
+            const filteredEntries = selectedFilter === "all" ? savings : savings.filter(entry => entry.type === selectedFilter);
+           
+            addEntries.innerHTML = "";
+            filteredEntries.forEach(entry => {
+                const li=document.createElement("li")
  li.className=" flex justify-between bg-gray-200 w-full  mb-2 p-4"
- li.innerHTML=`<div class="text-sm  md:text-base">${entry.content}-₹${entry.amount}(${entry.type})</div><div class="space-x-2 flex"><button class="md:text-sm   px-2 py-1 text-xs   bg-blue-500 px-2 py-1 md:px-3 md:py-1 text-white  rounded"  onclick="editItem(${index})">Edit</button>
-   <button class="bg-red-500 px-2 py-1 text-xs md:text-sm   md:px-3 md:py-1 text-white rounded" onclick="deleteItem(${index})">Delete</button></div>`
+ li.innerHTML=`<div class="text-sm  md:text-base">${entry.content}-₹${entry.amount}(${entry.type})</div>
+ <div class="space-x-2 flex"><button class="md:text-sm   px-2 py-1 text-xs   bg-blue-500 px-2 py-1 md:px-3 md:py-1 text-white  rounded"  onclick="editEntry(${entry.id})">Edit</button>
+   <button class="bg-red-500 px-2 py-1 text-xs md:text-sm   md:px-3 md:py-1 text-white rounded" onclick="deleteEntry(${entry.id})">Delete</button></div>`
  addEntries.appendChild(li);
  
   })
   localStorage.setItem("savings", JSON.stringify(savings)); 
-}
+           
+        }
 
-//delete part
-function deleteItem(index){
-  const entry = savings[index];
-    if (entry.type === "income") {
-      totalIncome -= entry.amount;
-    } else if (entry.type === "expense") {
-      totalExpense -= entry.amount;
-    }
+        //  edit-part
+        function editEntry(id) {
+            const entry = savings.find(entry => entry.id === id);
+            if (entry) {
+               
+                document.getElementById("content").value = entry.content;
+                document.getElementById("amount").value = entry.amount;
+                document.getElementById("dropdown").value = entry.type;
 
-savings.splice(index,1);
+                savings = savings.filter(entry => entry.id !== id);
 
-updateUI();
-}
+              
+                localStorage.setItem("savings", JSON.stringify(savings));
+                updateUI();
+            }
+            
+        }
+        
 
-//edit part
-function editItem(index){
- const entry = savings[index];
-  document.getElementById("content").value = entry.content;
-  document.getElementById("amount").value = entry.amount;
-  document.getElementById("dropdown").value=entry.type;
- deleteItem(index);
+        //  delete  entry
+        function deleteEntry(id) {
+            savings = savings.filter(entry => entry.id !== id);// for delete purpose 
+            localStorage.setItem("savings", JSON.stringify(savings));
+            updateUI();
+        }
 
- 
- 
-}
+        //  reset-part
+        function resetAll() {
+            savings = [];
+            document.getElementById("content").value = "";
+            document.getElementById("amount").value = "";
 
- filter.forEach((radio) => {
-        radio.addEventListener("change", () => {
-            const selectedFilter = document.querySelector('input[name="filter"]:checked').value;
-            updateUI(selectedFilter); 
-        });
-    });
-
-  reset.addEventListener("click",()=>{
-    savings = [];
-    totalIncome=0;
-   totalExpense=0;
-        updateUI();
-        localStorage.clear();
-        content.value="";
-        amount.value="";
-  }
-  
-  )
-  updateUI();
-</script>
+            localStorage.removeItem("savings");
+            updateUI();
+        }
+    </script>
+</body>
 </html>
